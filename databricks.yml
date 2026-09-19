@@ -12,8 +12,8 @@ variables:
   schema:
     description: The schema to use
 
-  customers_source_path:
-    description: Source path for synthetic customers CSV
+  structured_source_path:
+    description: Source directory for synthetic structured data
 
 targets:
   dev:
@@ -26,7 +26,7 @@ targets:
     variables:
       catalog: bank_acme
       schema: ${workspace.current_user.short_name}
-      customers_source_path: /Volumes/bank_acme/bronze/raw/structured/customers.csv
+      structured_source_path: /Volumes/bank_acme/bronze/raw/structured
 
   prod:
     mode: production
@@ -38,7 +38,7 @@ targets:
     variables:
       catalog: bank_acme
       schema: prod
-      customers_source_path: /Volumes/bank_acme/bronze/raw/structured/customers.csv
+      structured_source_path: /Volumes/bank_acme/bronze/raw/structured
 
     permissions:
       - user_name: educharlief@hotmail.com

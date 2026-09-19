@@ -10,7 +10,7 @@ resources:
 
       libraries:
         - file:
-            path: ../src/ingestion/bronze_customers.py
+            path: ../src/ingestion/bronze_structured.py
 
       configuration:
-        customers_source_path: ${var.customers_source_path}
+        structured_source_path: ${var.structured_source_path}
