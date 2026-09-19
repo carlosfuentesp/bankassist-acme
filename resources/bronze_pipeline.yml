@@ -1,0 +1,16 @@
+resources:
+  pipelines:
+    bronze_ingestion:
+      name: bankassist_acme_bronze_ingestion
+
+      catalog: ${var.catalog}
+      schema: bronze
+
+      serverless: true
+
+      libraries:
+        - file:
+            path: ../src/ingestion/bronze_customers.py
+
+      configuration:
+        customers_source_path: ${var.customers_source_path}

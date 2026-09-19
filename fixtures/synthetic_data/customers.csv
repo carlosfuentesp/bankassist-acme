@@ -1,0 +1,5 @@
+customer_id,full_name,city,customer_segment
+CUST-001,Ana Torres,Quito,MASS
+CUST-002,Luis Mendoza,Guayaquil,MASS
+CUST-003,Carolina Pérez,Ambato,AFFLUENT
+CUST-004,Diego Romero,Cuenca,MASS

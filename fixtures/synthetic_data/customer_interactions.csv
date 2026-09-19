@@ -1,0 +1,5 @@
+interaction_id,customer_id,interaction_ts,channel,notes
+INT-001,CUST-001,2026-09-15T11:00:00,PHONE,Cliente indica dificultad temporal de liquidez y promete pagar USD 500 el 30 de septiembre.
+INT-002,CUST-002,2026-08-25T15:20:00,PHONE,Cliente acuerda realizar un pago de USD 600 el 5 de septiembre.
+INT-003,CUST-003,2026-08-30T10:40:00,WHATSAPP,Cliente indica que no pudo cumplir el pago previamente acordado.
+INT-004,CUST-004,2026-08-05T09:00:00,EMAIL,Pago recibido correctamente. Cliente se encuentra al día.
