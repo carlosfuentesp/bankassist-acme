@@ -1,0 +1,17 @@
+resources:
+  pipelines:
+    silver_transformations:
+      name: bankassist_acme_silver_transformations
+
+      catalog: ${var.catalog}
+      schema: silver
+
+      serverless: true
+
+      root_path: ../src
+
+      libraries:
+        - file:
+            path: ../src/transformations/silver_customers.py
+        - file:
+            path: ../src/contracts/expectations.py
