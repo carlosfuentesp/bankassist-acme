@@ -12,6 +12,6 @@ resources:
 
       libraries:
         - file:
-            path: ../src/transformations/silver_customers.py
+            path: ../src/transformations/silver_structured.py
         - file:
             path: ../src/contracts/expectations.py
