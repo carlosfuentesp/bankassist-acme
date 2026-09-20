@@ -1,0 +1,15 @@
+resources:
+  pipelines:
+    document_transformations:
+      name: bankassist_acme_document_transformations
+
+      catalog: ${var.catalog}
+      schema: silver
+
+      serverless: true
+
+      root_path: ../src
+
+      libraries:
+        - file:
+            path: ../src/documents/silver_policies.py
