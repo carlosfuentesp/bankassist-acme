@@ -1,0 +1,15 @@
+resources:
+  pipelines:
+    gold_transformations:
+      name: bankassist_acme_gold_transformations
+
+      catalog: ${var.catalog}
+      schema: gold
+
+      serverless: true
+
+      root_path: ../src
+
+      libraries:
+        - file:
+            path: ../src/transformations/gold_collections.py
