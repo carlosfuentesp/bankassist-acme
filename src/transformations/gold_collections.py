@@ -114,3 +114,35 @@ def customer_collections_snapshot():
                 .alias("latest_interaction_notes"),
         )
     )
+
+@dp.materialized_view(
+    name="broken_promise_candidates",
+    comment="Structured candidates with 31-60 DPD and a broken payment promise",
+)
+def broken_promise_candidates():
+    snapshot = spark.read.table(
+        "bank_acme.gold.customer_collections_snapshot"
+    )
+
+    return (
+        snapshot
+        .filter(
+            (F.col("product_type") == "CONSUMER_LOAN")
+            & (F.col("days_past_due").between(31, 60))
+            & (F.col("latest_promise_status") == "BROKEN")
+        )
+        .select(
+            "customer_id",
+            "full_name",
+            "loan_id",
+            "product_type",
+            "outstanding_balance",
+            "days_past_due",
+            "latest_promise_date",
+            "latest_promised_payment_date",
+            "latest_promised_amount",
+            "latest_promise_status",
+            "latest_arrangement_date",
+            "snapshot_date",
+        )
+    )
