@@ -1,0 +1,18 @@
+resources:
+  pipelines:
+    document_ingestion:
+      name: bankassist_acme_document_ingestion
+
+      catalog: ${var.catalog}
+      schema: bronze
+
+      serverless: true
+
+      root_path: ../src
+
+      libraries:
+        - file:
+            path: ../src/documents/bronze_policies.py
+
+      configuration:
+        documents_source_path: ${var.documents_source_path}

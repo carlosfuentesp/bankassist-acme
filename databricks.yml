@@ -15,6 +15,9 @@ variables:
   structured_source_path:
     description: Source directory for synthetic structured data
 
+  documents_source_path:
+    description: Source directory for Banco ACME policy documents
+
 targets:
   dev:
     mode: development
@@ -27,6 +30,7 @@ targets:
       catalog: bank_acme
       schema: ${workspace.current_user.short_name}
       structured_source_path: /Volumes/bank_acme/bronze/raw/structured
+      documents_source_path: /Volumes/bank_acme/bronze/raw/documents
 
   prod:
     mode: production
@@ -39,6 +43,7 @@ targets:
       catalog: bank_acme
       schema: prod
       structured_source_path: /Volumes/bank_acme/bronze/raw/structured
+      documents_source_path: /Volumes/bank_acme/bronze/raw/documents
 
     permissions:
       - user_name: educharlief@hotmail.com
