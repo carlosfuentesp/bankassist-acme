@@ -1,0 +1,15 @@
+resources:
+  pipelines:
+    document_chunking:
+      name: bankassist_acme_document_chunking
+
+      catalog: ${var.catalog}
+      schema: ai
+
+      serverless: true
+
+      root_path: ../src
+
+      libraries:
+        - file:
+            path: ../src/documents/chunk_policies.py
