@@ -1,0 +1,17 @@
+resources:
+  jobs:
+    test_mcp_clients:
+      name: bankassist_acme_test_mcp_clients
+
+      tasks:
+        - task_key: test_mcp_clients
+          notebook_task:
+            notebook_path: ../src/agents/bankassist/test_mcp_clients.py
+          environment_key: default
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - databricks-langchain==0.20.0
