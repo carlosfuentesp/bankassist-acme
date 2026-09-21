@@ -8,3 +8,7 @@ AI_SEARCH_MCP_PATH = (
     "/api/2.0/mcp/ai-search/"
     "bank_acme/ai/policy_chunks_index"
 )
+
+FOUNDATION_MODEL = (
+    "databricks-qwen3-next-80b-a3b-instruct"
+)
