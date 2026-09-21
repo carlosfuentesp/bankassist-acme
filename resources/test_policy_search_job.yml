@@ -1,0 +1,17 @@
+resources:
+  jobs:
+    test_policy_search:
+      name: bankassist_acme_test_policy_search
+
+      tasks:
+        - task_key: test_policy_search
+          spark_python_task:
+            python_file: ../src/retrieval/test_policy_search.py
+          environment_key: default
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "2"
+            dependencies:
+              - databricks-ai-search
