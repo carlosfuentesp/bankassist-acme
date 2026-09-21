@@ -1,6 +1,7 @@
 bundle:
   name: bankassist_acme
   uuid: b1212dfa-0cda-4782-a156-1fd5d87852cc
+  engine: direct
 
 include:
   - resources/*.yml
