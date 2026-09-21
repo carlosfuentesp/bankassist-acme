@@ -1,6 +1,5 @@
 from databricks.ai_search.client import AISearchClient
 
-
 ENDPOINT_NAME = "bankassist-acme-ai-search-dev"
 INDEX_NAME = "bank_acme.ai.policy_chunks_index"
 

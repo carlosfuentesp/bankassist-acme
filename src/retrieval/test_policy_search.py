@@ -1,6 +1,5 @@
 from policy_search import search_active_collections_policies
 
-
 QUERY = (
     "What are the conditions for evaluating a payment arrangement "
     "after a broken promise?"
@@ -18,7 +17,7 @@ manifest_columns = [
 ]
 
 for row in response["result"]["data_array"]:
-    result = dict(zip(manifest_columns, row))
+    result = dict(zip(manifest_columns, row, strict=True))
 
     print(f"policy_id:       {result['policy_id']}")
     print(f"version:         {result['version']}")

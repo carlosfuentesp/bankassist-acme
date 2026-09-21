@@ -1,0 +1,22 @@
+resources:
+  jobs:
+    integration_tests:
+      name: bankassist_acme_integration_tests
+
+      tasks:
+        - task_key: bankassist_eligibility
+          python_wheel_task:
+            package_name: bankassist-acme
+            entry_point: bankassist-job
+          environment_key: default
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - ../dist/*.whl
+              - databricks-langchain==0.20.0
+              - databricks-openai==0.17.1
+              - databricks-mcp>=0.3.0
+              - mlflow>=3.0,<4

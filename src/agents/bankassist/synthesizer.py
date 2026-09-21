@@ -2,8 +2,8 @@ import json
 
 from databricks_openai import DatabricksOpenAI
 
-from config import FOUNDATION_MODEL
-
+from agents.bankassist.config import FOUNDATION_MODEL
+from agents.bankassist.guardrails import validate_answer
 
 SYSTEM_PROMPT = """
 You are BankAssist, an assistant for authorized Banco ACME collections analysts.
@@ -117,11 +117,21 @@ def build_context_package(evidence: dict) -> dict:
     }
 
 
+def _policy_ids(context_package: dict) -> set[str]:
+    serialized = json.dumps(context_package["policy_evidence"], default=str)
+    import re
+
+    return set(re.findall(r"POL-[A-Z]+-\d{4}-\d+", serialized))
+
+
 def synthesize_bankassist_answer(
     user_question: str,
     evidence: dict,
-) -> str:
+    eligibility_assessments: list[dict] | None = None,
+) -> tuple[str, dict]:
     context_package = build_context_package(evidence)
+    if eligibility_assessments is not None:
+        context_package["deterministic_eligibility_assessments"] = eligibility_assessments
 
     user_prompt = f"""
 USER QUESTION
@@ -156,4 +166,11 @@ Produce the final BankAssist answer using only this evidence.
         max_tokens=1000,
     )
 
-    return response.choices[0].message.content
+    answer = response.choices[0].message.content or ""
+    answer = validate_answer(answer, _policy_ids(context_package))
+    usage = getattr(response, "usage", None)
+    usage_data = {
+        "input_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
+        "output_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
+    }
+    return answer, usage_data

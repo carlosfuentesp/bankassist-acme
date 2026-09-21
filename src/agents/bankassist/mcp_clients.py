@@ -1,7 +1,7 @@
-from databricks_mcp import DatabricksMCPClient
 from databricks.sdk import WorkspaceClient
+from databricks_mcp import DatabricksMCPClient
 
-from config import GENIE_MCP_PATH, AI_SEARCH_MCP_PATH
+from agents.bankassist.config import AI_SEARCH_MCP_PATH, GENIE_MCP_PATH
 
 
 def _workspace_client() -> WorkspaceClient:

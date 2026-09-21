@@ -1,5 +1,6 @@
 import asyncio
 import json
+from typing import Any
 
 from databricks.sdk import WorkspaceClient
 from databricks_langchain import (
@@ -7,12 +8,16 @@ from databricks_langchain import (
     DatabricksMultiServerMCPClient,
 )
 from databricks_mcp.oauth_provider import DatabricksOAuthClientProvider
-from mcp.client.streamable_http import streamablehttp_client
 from mcp.client.session import ClientSession
+from mcp.client.streamable_http import streamablehttp_client
 from mcp.types import CallToolRequest, CallToolResult
 
-from config import GENIE_MCP_PATH, AI_SEARCH_MCP_PATH
-
+from agents.bankassist.config import (
+    AI_SEARCH_MCP_PATH,
+    GENIE_MCP_PATH,
+    GENIE_POLL_SECONDS,
+    MAX_GENIE_POLLS,
+)
 
 TERMINAL_GENIE_STATUSES = {
     "COMPLETED",
@@ -21,8 +26,10 @@ TERMINAL_GENIE_STATUSES = {
 }
 
 
-def _parse_langchain_tool_result(result):
-    text = result[0]["text"]
+def _parse_langchain_tool_result(result: Any) -> dict:
+    content = result if isinstance(result, list) else getattr(result, "content", result)
+    item = content[0]
+    text = item.get("text") if isinstance(item, dict) else getattr(item, "text", "")
     return json.loads(text)
 
 
@@ -102,16 +109,21 @@ async def get_bankassist_evidence(
         if tool.name.startswith("poll_response_")
     )
 
-    genie_result = await genie_query_tool.ainvoke(
-        {
-            "query": structured_query,
-        }
+    genie_result, policy_task = await asyncio.gather(
+        genie_query_tool.ainvoke({"query": structured_query}),
+        _search_active_collections_policy(workspace=workspace, query=policy_query),
     )
 
     genie_response = _parse_langchain_tool_result(genie_result)
 
+    polls = 0
     while genie_response["status"] not in TERMINAL_GENIE_STATUSES:
-        await asyncio.sleep(2)
+        if polls >= MAX_GENIE_POLLS:
+            raise TimeoutError(
+                f"Genie did not finish after {MAX_GENIE_POLLS} polls."
+            )
+        polls += 1
+        await asyncio.sleep(GENIE_POLL_SECONDS)
 
         poll_result = await genie_poll_tool.ainvoke(
             {
@@ -128,12 +140,7 @@ async def get_bankassist_evidence(
             f"{genie_response['status']}"
         )
 
-    policy_response = await _search_active_collections_policy(
-        workspace=workspace,
-        query=policy_query,
-    )
-
     return {
         "structured_evidence": genie_response,
-        "policy_evidence": policy_response,
+        "policy_evidence": policy_task,
     }

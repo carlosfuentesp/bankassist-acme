@@ -1,4 +1,3 @@
-from pyspark.sql import functions as F
 
 
 source = spark.read.table("bank_acme.ai.policy_chunks")

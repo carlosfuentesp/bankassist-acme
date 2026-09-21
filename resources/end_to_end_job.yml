@@ -1,0 +1,51 @@
+resources:
+  jobs:
+    bankassist_end_to_end:
+      name: bankassist_acme_end_to_end
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: ingest_structured
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.bronze_ingestion.id}
+        - task_key: transform_structured
+          depends_on:
+            - task_key: ingest_structured
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.silver_transformations.id}
+        - task_key: build_collections_snapshot
+          depends_on:
+            - task_key: transform_structured
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.gold_transformations.id}
+
+        - task_key: ingest_documents
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.document_ingestion.id}
+        - task_key: transform_documents
+          depends_on:
+            - task_key: ingest_documents
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.document_transformations.id}
+        - task_key: chunk_documents
+          depends_on:
+            - task_key: transform_documents
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.document_chunking.id}
+        - task_key: publish_policy_index_source
+          depends_on:
+            - task_key: chunk_documents
+          run_job_task:
+            job_id: ${resources.jobs.publish_policy_chunks.id}
+
+        - task_key: validate_business_case
+          depends_on:
+            - task_key: build_collections_snapshot
+            - task_key: publish_policy_index_source
+          run_job_task:
+            job_id: ${resources.jobs.integration_tests.id}
+
+        - task_key: evaluate_bankassist
+          depends_on:
+            - task_key: validate_business_case
+          run_job_task:
+            job_id: ${resources.jobs.bankassist_evaluation.id}

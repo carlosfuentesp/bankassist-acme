@@ -1,0 +1,21 @@
+resources:
+  apps:
+    bankassist_app:
+      name: bankassist-acme-${bundle.target}
+      description: Grounded collections assistant for Banco ACME
+      source_code_path: ..
+      resources:
+        - name: genie-space
+          genie_space:
+            name: bankassist-consumer-loan-collections
+            space_id: ${var.genie_space_id}
+            permission: CAN_RUN
+        - name: serving-endpoint
+          serving_endpoint:
+            name: ${var.foundation_model}
+            permission: CAN_QUERY
+        - name: policy-index
+          uc_securable:
+            securable_type: TABLE
+            securable_full_name: bank_acme.ai.policy_chunks_index
+            permission: SELECT

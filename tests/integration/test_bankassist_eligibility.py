@@ -1,8 +1,7 @@
-# Databricks notebook source
+import asyncio
 
-from orchestrator import get_bankassist_evidence
-from synthesizer import synthesize_bankassist_answer
-
+from agents.bankassist.orchestrator import get_bankassist_evidence
+from agents.bankassist.synthesizer import synthesize_bankassist_answer
 
 USER_QUESTION = """
 ¿Qué clientes con créditos de consumo entre 31 y 60 días de mora
@@ -65,7 +64,7 @@ async def main():
     print("Calling foundation model...")
     print("=" * 80)
 
-    answer = synthesize_bankassist_answer(
+    answer, usage = synthesize_bankassist_answer(
         user_question=USER_QUESTION,
         evidence=evidence,
     )
@@ -74,6 +73,8 @@ async def main():
     print("BANKASSIST ELIGIBILITY ANSWER")
     print("=" * 80)
     print(answer)
+    print(f"Model usage: {usage}")
 
 
-await main()
+if __name__ == "__main__":
+    asyncio.run(main())
