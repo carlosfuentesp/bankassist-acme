@@ -1,0 +1,196 @@
+{
+  "version": 2,
+  "data_sources": {
+    "tables": [
+      {
+        "identifier": "bank_acme.gold.customer_collections_snapshot",
+        "column_configs": [
+          {
+            "column_name": "city",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "customer_id",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "customer_segment",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "days_past_due",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "full_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "latest_arrangement_date",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_interaction_channel",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "latest_interaction_notes",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "latest_interaction_ts",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_payment_amount",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_payment_channel",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "latest_payment_date",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_promise_date",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_promise_status",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "latest_promised_amount",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "latest_promised_payment_date",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "loan_id",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "loan_status",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "original_amount",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "outstanding_balance",
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "product_type",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "snapshot_date",
+            "enable_format_assistance": true
+          }
+        ]
+      }
+    ]
+  },
+  "instructions": {
+    "text_instructions": [
+      {
+        "id": "01f1b551b6ff1ffc97790135b5f77eb6",
+        "content": [
+          "You are the structured-data analyst for Banco ACME consumer-loan collections.\n",
+          "\n",
+          "Use bank_acme.gold.customer_collections_snapshot as the primary source for customer-level collections analysis.\n",
+          "\n",
+          "Interpret:\n",
+          "- days_past_due as the number of days the loan is past due.\n",
+          "- outstanding_balance as the current outstanding loan balance.\n",
+          "- latest_payment_amount and latest_payment_date as the customer's most recent recorded payment.\n",
+          "- latest_promise_status, latest_promised_amount, and latest_promise_date as the most recent payment promise information.\n",
+          "- latest_arrangement_date as the most recent payment arrangement date.\n",
+          "- latest_interaction_channel and latest_interaction_ts as the most recent customer interaction.\n",
+          "\n",
+          "Do not infer policy eligibility from this table alone.\n",
+          "Do not approve or recommend a payment arrangement.\n",
+          "Policy eligibility will be determined separately using Banco ACME policy retrieval."
+        ]
+      }
+    ],
+    "example_question_sqls": [
+      {
+        "id": "01f1b552a8f615b8b4227e2efeb0f392",
+        "question": [
+          "Which customers with consumer loans between 31 and 60 days past due have a broken payment promise?"
+        ],
+        "sql": [
+          "SELECT\n",
+          "  `customer_id`,\n",
+          "  `full_name`,\n",
+          "  `loan_id`,\n",
+          "  `days_past_due`,\n",
+          "  `outstanding_balance`,\n",
+          "  `latest_promise_status`,\n",
+          "  `latest_promised_payment_date`,\n",
+          "  `latest_arrangement_date`\n",
+          "FROM\n",
+          "  `bank_acme`.`gold`.`customer_collections_snapshot`\n",
+          "WHERE\n",
+          "  `product_type` = 'CONSUMER_LOAN'\n",
+          "  AND `days_past_due` BETWEEN 31 AND 60\n",
+          "  AND `latest_promise_status` = 'BROKEN'\n",
+          "ORDER BY\n",
+          "  `days_past_due` DESC,\n",
+          "  `outstanding_balance` DESC"
+        ]
+      },
+      {
+        "id": "01f1b552c0c41e948b94629651f1ffd0",
+        "question": [
+          "Analyze customer CUST-001.  What is the customer's delinquency status, outstanding balance, latest payment, latest payment promise, and latest customer interaction?"
+        ],
+        "sql": [
+          "SELECT\n",
+          "  `customer_id`,\n",
+          "  `full_name`,\n",
+          "  `city`,\n",
+          "  `customer_segment`,\n",
+          "  `loan_id`,\n",
+          "  `product_type`,\n",
+          "  `original_amount`,\n",
+          "  `outstanding_balance`,\n",
+          "  `days_past_due`,\n",
+          "  `loan_status`,\n",
+          "  `snapshot_date`,\n",
+          "  `latest_payment_date`,\n",
+          "  `latest_payment_amount`,\n",
+          "  `latest_payment_channel`,\n",
+          "  `latest_promise_date`,\n",
+          "  `latest_promised_payment_date`,\n",
+          "  `latest_promised_amount`,\n",
+          "  `latest_promise_status`,\n",
+          "  `latest_arrangement_date`,\n",
+          "  `latest_interaction_ts`,\n",
+          "  `latest_interaction_channel`,\n",
+          "  `latest_interaction_notes`\n",
+          "FROM\n",
+          "  `bank_acme`.`gold`.`customer_collections_snapshot`\n",
+          "WHERE\n",
+          "  `customer_id` = 'CUST-001'"
+        ]
+      }
+    ]
+  }
+}
