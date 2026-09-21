@@ -1,0 +1,17 @@
+resources:
+  jobs:
+    test_ai_search_mcp:
+      name: bankassist_acme_test_ai_search_mcp
+
+      tasks:
+        - task_key: test_ai_search_mcp
+          notebook_task:
+            notebook_path: ../src/agents/bankassist/test_ai_search_mcp.py
+          environment_key: default
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "6"
+            dependencies:
+              - databricks-langchain==0.20.0
