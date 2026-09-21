@@ -10,9 +10,6 @@ variables:
   catalog:
     description: The catalog to use
 
-  schema:
-    description: The schema to use
-
   structured_source_path:
     description: Source directory for synthetic structured data
 
@@ -25,10 +22,8 @@ variables:
   foundation_model:
     description: Foundation model serving endpoint
 
-artifacts:
-  default:
-    type: whl
-    build: uv build
+  genie_warehouse_id:
+    description: SQL warehouse used by the BankAssist Genie space
 
 targets:
   dev:
@@ -40,11 +35,11 @@ targets:
 
     variables:
       catalog: bank_acme
-      schema: ${workspace.current_user.short_name}
       structured_source_path: /Volumes/bank_acme/bronze/raw/structured
       documents_source_path: /Volumes/bank_acme/bronze/raw/documents
       genie_space_id: 01f1b55197c11b7995b4599d90badc02
       foundation_model: databricks-qwen3-next-80b-a3b-instruct
+      genie_warehouse_id: 84d4ddc889846b8a
 
   prod:
     mode: production
@@ -55,11 +50,11 @@ targets:
 
     variables:
       catalog: bank_acme
-      schema: prod
       structured_source_path: /Volumes/bank_acme/bronze/raw/structured
       documents_source_path: /Volumes/bank_acme/bronze/raw/documents
       genie_space_id: 01f1b55197c11b7995b4599d90badc02
       foundation_model: databricks-qwen3-next-80b-a3b-instruct
+      genie_warehouse_id: 84d4ddc889846b8a
 
     permissions:
       - user_name: educharlief@hotmail.com

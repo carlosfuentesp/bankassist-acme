@@ -23,13 +23,3 @@ FOUNDATION_MODEL = os.getenv(
 
 MAX_GENIE_POLLS = int(os.getenv("BANKASSIST_MAX_GENIE_POLLS", "60"))
 GENIE_POLL_SECONDS = float(os.getenv("BANKASSIST_GENIE_POLL_SECONDS", "2"))
-
-# Rates are deliberately configurable: workspace pricing and model rates vary.
-MODEL_INPUT_USD_PER_MILLION = float(
-    os.getenv("BANKASSIST_MODEL_INPUT_USD_PER_MILLION", "0")
-)
-MODEL_OUTPUT_USD_PER_MILLION = float(
-    os.getenv("BANKASSIST_MODEL_OUTPUT_USD_PER_MILLION", "0")
-)
-GENIE_USD_PER_QUERY = float(os.getenv("BANKASSIST_GENIE_USD_PER_QUERY", "0"))
-AI_SEARCH_USD_PER_QUERY = float(os.getenv("BANKASSIST_AI_SEARCH_USD_PER_QUERY", "0"))

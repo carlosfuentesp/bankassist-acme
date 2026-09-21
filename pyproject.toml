@@ -8,7 +8,6 @@ dependencies = [
     "databricks-mcp>=0.3.0",
     "databricks-openai==0.17.1",
     "databricks-sdk>=0.94.0",
-    "mlflow>=3.0,<4",
 ]
 
 [dependency-groups]
@@ -17,11 +16,6 @@ dev = [
     "pytest-asyncio>=0.24",
     "ruff>=0.9",
 ]
-
-[project.scripts]
-bankassist = "agents.bankassist.cli:main"
-bankassist-evaluate = "agents.bankassist.evaluation:main"
-bankassist-job = "agents.bankassist.job:main"
 
 [build-system]
 requires = ["hatchling"]

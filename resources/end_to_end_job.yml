@@ -36,16 +36,3 @@ resources:
             - task_key: chunk_documents
           run_job_task:
             job_id: ${resources.jobs.publish_policy_chunks.id}
-
-        - task_key: validate_business_case
-          depends_on:
-            - task_key: build_collections_snapshot
-            - task_key: publish_policy_index_source
-          run_job_task:
-            job_id: ${resources.jobs.integration_tests.id}
-
-        - task_key: evaluate_bankassist
-          depends_on:
-            - task_key: validate_business_case
-          run_job_task:
-            job_id: ${resources.jobs.bankassist_evaluation.id}

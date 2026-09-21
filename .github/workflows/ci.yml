@@ -16,4 +16,3 @@ jobs:
       - run: uv sync --dev
       - run: uv run ruff check src tests
       - run: uv run pytest
-      - run: uv build

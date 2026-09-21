@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 
 import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
+
+logger = logging.getLogger("bankassist.app")
 
 from agents.bankassist.async_utils import run_sync  # noqa: E402
 from agents.bankassist.prompts import DEFAULT_QUESTION  # noqa: E402
@@ -42,14 +45,11 @@ if question:
             try:
                 result = run_sync(ask_bankassist(question))
             except Exception as exc:
+                logger.exception("BankAssist query failed")
                 st.error(f"No fue posible completar la consulta: {exc}")
             else:
                 st.markdown(result.answer)
-                st.caption(
-                    f"Latencia: {result.latency_seconds:.2f}s · "
-                    f"Coste estimado: ${result.cost['estimated_usd']:.6f}"
-                    + ("" if result.cost["configured"] else " (tarifas aún no configuradas)")
-                )
+                st.caption(f"Latencia: {result.latency_seconds:.2f}s")
                 with st.expander("Evaluación determinista"):
                     st.json(result.assessments)
                 with st.expander("Evidencia y trazabilidad"):
